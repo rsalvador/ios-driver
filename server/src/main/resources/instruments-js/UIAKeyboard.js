@@ -24,8 +24,12 @@ UIAKeyboard.prototype.typeString_original = UIAKeyboard.prototype.typeString;
  * @param value
  */
 UIAKeyboard.prototype.typeString = function (value) {
-
     var regularCharacters = "";
+    
+    // default is 0.03, but with it we see 1/1000 tests failing with a key being typed
+    // with the wrong case or with a failing to tap a character
+    this.setInterKeyDelay(0.1);
+    
     for (var i = 0; i < value.length; i++) {
         var letter = value[i];
         var key = this.getSpecialKey(letter);
@@ -73,7 +77,6 @@ UIAKeyboard.prototype.typeString = function (value) {
             // for whatever reason if the offset is 1, it needs just a little bit more time.
             var wait = (Math.max(3, multiplier + 1)) * 0.4;
             UIATarget.localTarget().dragFromToForDuration({x: x, y: y}, {x: toX, y: toY}, wait);
-
         } else {
             regularCharacters += letter;
         }
