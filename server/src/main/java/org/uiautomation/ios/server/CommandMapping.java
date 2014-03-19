@@ -20,6 +20,7 @@ import org.uiautomation.ios.communication.WebDriverLikeCommand;
 import org.uiautomation.ios.communication.WebDriverLikeRequest;
 import org.uiautomation.ios.server.command.BaseNativeCommandHandler;
 import org.uiautomation.ios.server.command.BaseWebCommandHandler;
+import org.uiautomation.ios.server.command.ExecuteHostHandler;
 import org.uiautomation.ios.server.command.Handler;
 import org.uiautomation.ios.server.command.NotImplementedNativeHandler;
 import org.uiautomation.ios.server.command.NotImplementedWebHandler;
@@ -257,6 +258,14 @@ public enum CommandMapping {
 
   public Handler createHandler(IOSServerManager driver, WebDriverLikeRequest request)
       throws Exception {
+    if (nativeHandlerClass == ExecuteScriptNHandler.class) {
+      // TEMP: redirect "host: " scripts to ExecuteHostHandler
+      String script = request.getPayload().getString("script");
+      if (script != null && script.startsWith("host: ")) {
+         return new ExecuteHostHandler(driver, request);
+      }
+    }
+
     boolean isNative = isNative(driver, request);
     Class<?> clazz;
 
