@@ -28,7 +28,9 @@ UIAKeyboard.prototype.typeString = function (value) {
     
     // default is 0.03, but with it we see 1/1000 tests failing with a key being typed
     // with the wrong case or with a failing to tap a character
-    this.setInterKeyDelay(0.1);
+    // had to increase to 0.1 for iOS 7.0
+    // had to increase to 0.5 for iOS 7.1
+    this.setInterKeyDelay(0.5);
     
     for (var i = 0; i < value.length; i++) {
         var letter = value[i];
